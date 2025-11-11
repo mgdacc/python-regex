@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentación Interactiva: Expresiones Regulares en Python</title>
+    <style>
+        /* === ESTILOS GLOBALES Y DE ESCRITORIO === */
+        body {
+            font-family: Arial, sans-serif; background-color: #f0f0f0; margin: 0;
+            padding: 40px; display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; box-sizing: border-box; transition: padding 0.3s ease;
+        }
+
+        .slideshow-container { position: relative; width: 90%; max-width: 960px; }
+        
+        .slide {
+            display: none; background-color: #fff; border: 1px solid #ccc;
+            height: 540px; padding: 40px 60px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            flex-direction: column; justify-content: center; position: relative;
+            box-sizing: border-box;
+        }
+
+        .fade { animation-name: fade; animation-duration: 0.5s; }
+        @keyframes fade { from {opacity: .4} to {opacity: 1} }
+
+        .prev, .next {
+            cursor: pointer; position: absolute; top: 50%; transform: translateY(-50%);
+            width: 50px; height: 50px; background-color: #cccccc; color: #333;
+            border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex; justify-content: center; align-items: center;
+            font-weight: bold; font-size: 24px; transition: all 0.3s ease;
+            user-select: none; z-index: 10;
+        }
+
+        .prev { left: -70px; }
+        .next { right: -70px; }
+        .prev:hover, .next:hover { background-color: #aaaaaa; }
+
+        .slide h1 { font-size: 3.5em; text-align: center; border-bottom: 4px solid #11a800; padding-bottom: 20px; color: #005A9C; }
+        .slide h2 { font-size: 2.8em; margin-top: 0; margin-bottom: 30px; text-align: center; color: #005A9C; }
+        .single-content { text-align: center; }
+        .single-content p { font-size: 1.5em; color: #444; }
+        .single-content pre { font-size: 1.2em; display: inline-block; text-align: left; max-width: 100%; }
+        pre { background-color: #2d3636; color: #fff; padding: 15px; border-radius: 5px; font-size: 1.1em; white-space: pre-wrap; }
+        .footer { position: absolute; bottom: 20px; right: 40px; font-size: 1em; color: #888; }
+
+        /* === MEDIA QUERIES === */
+        @media screen and (max-width: 768px) {
+            body { padding: 15px; }
+            .slideshow-container { width: 100%; padding-bottom: 75px; }
+            .slide { height: auto; min-height: 75vh; padding: 20px 25px; }
+            .prev, .next { top: auto; bottom: 15px; width: 45px; height: 45px; }
+            .prev { left: 50%; transform: translateX(-110%); }
+            .next { left: 50%; transform: translateX(10%); right: auto; }
+            .slide h1 { font-size: 2.2em; }
+            .slide h2 { font-size: 1.8em; }
+            .single-content p { font-size: 1.1em; }
+            .single-content pre { font-size: 1em; }
+            .footer { font-size: 0.8em; right: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slideshow-container">
+        
+        <div class="slide fade">
+            <h1>Cheat Sheet de Python</h1>
+            <h2 style="color:#333; border:none;">Expresiones Regulares (RegEx)</h2>
+            <div class="footer">1 / 20</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>¿Qué son las RegEx?</h2>
+            <div class="single-content"><p>Una secuencia de caracteres que define un <strong>patrón de búsqueda</strong>. Son como un "super buscador" para encontrar, validar y reemplazar texto.</p></div>
+            <div class="footer">2 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>El Módulo <code>re</code></h2>
+            <div class="single-content"><p>Python proporciona el módulo `re` en su librería estándar para trabajar con expresiones regulares.</p><pre><code>import re</code></pre></div>
+            <div class="footer">3 / 20</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Metacaracteres Básicos</h2>
+            <div class="single-content"><p>Son caracteres especiales que tienen un significado en el patrón.</p><pre><code>.   Cualquier carácter (excepto salto de línea)
+^   Inicio de la cadena
+$   Fin de la cadena
+[]  Un conjunto de caracteres permitidos
+|   Operador OR (uno u otro)
+()  Agrupar expresiones</code></pre></div>
+            <div class="footer">4 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Ejemplo de Metacaracteres</h2>
+            <div class="single-content"><p>Encontrar palabras que empiezan con 'c' y terminan con 'o'.</p><pre><code>patron = r"^c.*o$"
+# 'c' al inicio, seguido de cualquier cosa (.*), y 'o' al final.
+
+re.match(patron, "cielo") # Coincide
+re.match(patron, "carro") # Coincide
+re.match(patron, "moto")  # No coincide</code></pre></div>
+            <div class="footer">5 / 20</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Clases de Caracteres</h2>
+            <div class="single-content"><p>Secuencias especiales que representan conjuntos comunes.</p><pre><code>\d  Cualquier dígito (0-9)
+\D  Cualquier NO dígito
+\w  Cualquier carácter alfanumérico (a-z, A-Z, 0-9, _)
+\W  Cualquier NO alfanumérico
+\s  Cualquier espacio en blanco (espacio, tab, newline)
+\S  Cualquier NO espacio en blanco</code></pre></div>
+            <div class="footer">6 / 20</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Conjuntos Personalizados: <code>[]</code></h2>
+            <div class="single-content"><p>Permiten definir tus propias clases de caracteres.</p><pre><code>[aeiou]  # Cualquier vocal minúscula
+[a-z]    # Cualquier letra minúscula
+[A-Z0-9] # Cualquier letra mayúscula o dígito
+[^0-9]   # Cualquier carácter que NO sea un dígito</code></pre></div>
+            <div class="footer">7 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Cuantificadores</h2>
+            <div class="single-content"><p>Indican cuántas veces debe aparecer el carácter o grupo anterior.</p><pre><code>*   0 o más veces
++   1 o más veces
+?   0 o 1 vez
+{n} Exactamente n veces
+{n,} n o más veces
+{n,m} Entre n y m veces</code></pre></div>
+            <div class="footer">8 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Ejemplo de Cuantificadores</h2>
+            <div class="single-content"><p>Validar un código postal de 5 dígitos.</p><pre><code>patron = r"^\d{5}$"
+# Inicio, 5 dígitos exactamente, y fin.
+
+re.match(patron, "28080") # Coincide
+re.match(patron, "2808")  # No coincide
+re.match(patron, "280801") # No coincide</code></pre></div>
+            <div class="footer">9 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Función: <code>re.search()</code></h2>
+            <div class="single-content"><p>Busca la <strong>primera</strong> aparición del patrón en cualquier parte de la cadena. Devuelve un objeto `Match` si lo encuentra, o `None` si no.</p><pre><code>texto = "Hola 123 Mundo"
+match = re.search(r"\d+", texto)
+
+if match:
+    print(f"Encontrado: {match.group(0)}") # '123'</code></pre></div>
+            <div class="footer">10 / 20</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Función: <code>re.match()</code></h2>
+            <div class="single-content"><p>Similar a `search()`, pero solo busca coincidencias al <strong>principio</strong> de la cadena.</p><pre><code>texto = "123 Hola"
+# re.match(r"Hola", texto) -> No coincide
+
+texto2 = "Hola 123"
+# re.match(r"Hola", texto2) -> Sí coincide</code></pre></div>
+            <div class="footer">11 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Función: <code>re.findall()</code></h2>
+            <div class="single-content"><p>Devuelve una <strong>lista</strong> con todas las coincidencias del patrón en la cadena.</p><pre><code>texto = "Email1: test@test.com, Email2: admin@web.es"
+emails = re.findall(r"\w+@\w+\.\w+", texto)
+print(emails)
+# ['test@test.com', 'admin@web.es']</code></pre></div>
+            <div class="footer">12 / 20</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Función: <code>re.sub()</code></h2>
+            <div class="single-content"><p>Busca todas las apariciones de un patrón y las <strong>sustituye</strong> por otra cadena.</p><pre><code>texto = "Mi teléfono es 123-456-789"
+# Ocultar los números
+texto_oculto = re.sub(r"\d", "*", texto)
+print(texto_oculto) # Mi teléfono es ***-***-***</code></pre></div>
+            <div class="footer">13 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Grupos de Captura: <code>()</code></h2>
+            <div class="single-content"><p>Los paréntesis permiten "capturar" partes específicas de la coincidencia para usarlas después.</p><pre><code>texto = "Juan Perez"
+# Captura el nombre y el apellido en grupos separados
+patron = r"(\w+)\s(\w+)"
+match = re.search(patron, texto)
+
+print(match.group(0)) # 'Juan Perez' (coincidencia completa)
+print(match.group(1)) # 'Juan' (primer grupo)
+print(match.group(2)) # 'Perez' (segundo grupo)</code></pre></div>
+            <div class="footer">14 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Uso de Grupos con <code>re.sub()</code></h2>
+            <div class="single-content"><p>Puedes referenciar los grupos capturados en la cadena de reemplazo con `\1`, `\2`, etc.</p><pre><code># Cambiar el formato de una fecha
+fecha = "2024-11-25"
+# Captura año, mes y día
+patron = r"(\d{4})-(\d{2})-(\d{2})"
+# Reordena los grupos
+nueva_fecha = re.sub(patron, r"\2/\3/\1", fecha)
+print(nueva_fecha) # "11/25/2024"</code></pre></div>
+            <div class="footer">15 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Compilar Patrones: <code>re.compile()</code></h2>
+            <div class="single-content"><p>Si vas a usar el mismo patrón muchas veces, es más eficiente compilarlo primero. Crea un objeto de patrón reutilizable.</p><pre><code>patron_email = re.compile(r"\w+@\w+\.\w+")
+
+# Ahora puedes usar el objeto compilado
+emails1 = patron_email.findall(texto1)
+emails2 = patron_email.findall(texto2)</code></pre></div>
+            <div class="footer">16 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Modificadores (Flags)</h2>
+            <div class="single-content"><p>Permiten cambiar el comportamiento de la expresión regular.</p><pre><code># re.IGNORECASE o re.I: Ignora mayúsculas/minúsculas
+# re.MULTILINE o re.M: Hace que ^ y $ funcionen al inicio/final de cada línea
+# re.DOTALL o re.S: Hace que '.' coincida también con saltos de línea
+
+re.search("hola", "Hola Mundo", flags=re.IGNORECASE)</code></pre></div>
+            <div class="footer">17 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Cadenas Raw: `r""`</h2>
+            <div class="single-content"><p>Es una **muy buena práctica** usar siempre cadenas "raw" (crudas) para los patrones de RegEx. Evita que Python interprete los `\` como secuencias de escape.</p><pre><code># Bien
+patron = r"\d+"
+
+# Mal (propenso a errores)
+patron = "\\d+"</code></pre></div>
+            <div class="footer">18 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Caso de Uso: Validación</h2>
+            <div class="single-content"><p>Comprobar si un email tiene un formato válido.</p><pre><code>def es_email_valido(email):
+    patron = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    return re.match(patron, email) is not None
+
+print(es_email_valido("test@web.com")) # True
+print(es_email_valido("test@web"))     # False</code></pre></div>
+            <div class="footer">19 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Conclusión</h2>
+            <div class="single-content"><p>Las expresiones regulares son una herramienta increíblemente densa pero potente. Dominarlas te da un superpoder para cualquier tarea de manipulación de texto.</p></div>
+            <div class="footer">20 / 20</div>
+        </div>
+
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+
+    <script>
+        let slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("slide");
+            if (n > slides.length) { slideIndex = 1 } 
+            if (n < 1) { slideIndex = slides.length }
+            
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            
+            slides[slideIndex - 1].style.display = "flex";
+        }
+    </script>
+
+</body>
+</html>
